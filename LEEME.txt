@@ -1,0 +1,54 @@
+LABORATORIO VIRTUAL · Física Mecánica UAO (sitio independiente para Vercel)
+
+QUÉ ES
+  Recorrido por scroll hasta el laboratorio → vista 360° → tres mesas con la pregunta
+  "¿Qué instrumento se usó?". Funciona solo (enlace directo) o incrustado en el Módulo 1 (SCORM).
+  Cuando está incrustado avisa al módulo qué mesas se revisaron, para desbloquear el avance.
+
+DESPLEGAR EN VERCEL (cualquiera de las dos)
+  A) Arrastrar: entra a vercel.com → Add New → Project → arrastra esta carpeta.
+  B) Terminal (en tu Mac): cd laboratorio-virtual && npx vercel --prod
+  Copia la URL que te da Vercel y pégala en el SCORM, en js/config.js → links.laboratorio
+
+RECORRIDO FLUIDO (video de 120 fps)
+  No uses el MP4 directo con scroll: salta entre cuadros. Conviértelo en imágenes:
+    ffmpeg -i recorrido.mov -vf "fps=15,scale=1920:-2:flags=lanczos" -c:v libwebp -quality 80 assets/recorrido/f_%04d.webp
+  Cuenta los archivos generados (ls assets/recorrido | wc -l) y en js/config.js:
+    recorrido: { frames: { count: N, path: "assets/recorrido/f_####.webp" } }
+  Si el recorrido dura mucho, usa fps=24 para que pese menos.
+
+IMAGEN 360
+  Reemplaza assets/lab360.jpg (equirectangular 2:1). Abre la página con ?pos=1, mira cada mesa
+  y copia los valores yaw/pitch en js/config.js.
+
+MESAS Y MODELADOS 3D
+  En js/config.js → MESAS: la respuesta correcta (c) está POR CONFIRMAR.
+  Para usar los modelados: exporta cada instrumento como PNG transparente en assets/modelos/
+  y escribe la ruta como tercer valor de la opción, ej. ["Sensor de fotopuerta","fotopuerta","assets/modelos/fotopuerta.png"].
+
+MONTAJE DE CAÍDA LIBRE (Mesa 1)
+  Fotos de cada paso: assets/caida/ (mesa vacía, computador, interfaz, fotopuerta, lámina, sensor, pelotas, piso).
+  Textos y orden de los pasos: js/config.js → MESAS.m1.versiones.
+  Video de la prueba (después del montaje, antes de la pregunta): campo "video" de cada versión.
+    Lámina: assets/caida/prueba_lamina.mp4. Pelotas: vacío (se salta). Cuando lo graben, conviértanlo con:
+    ffmpeg -i ORIGINAL.mp4 -vf scale=1920:-2,format=yuv420p -c:v libx264 -crf 21 -c:a aac -movflags +faststart assets/caida/prueba_pelotas.mp4
+    y pongan esa ruta en "video" (y una foto del video en "poster").
+
+MOVIMIENTO PARABÓLICO (Mesa 3)
+  Pregunta de predicción con dos casos (A: balín desde más arriba, B: desde más abajo).
+  Al tocar un caso se reproduce su video: assets/parabolico/parabola_alta.mp4 (Parabola 1.1) y parabola_baja.mp4 (Parabola 1.2).
+  Al terminar el primer video se da la retroalimentación y la mesa queda completada; se puede ver el otro caso.
+  Textos: js/config.js → MESAS.m3.
+
+MODELADOS 3D (pregunta final)
+  Formato GLB, idealmente menos de 5 MB cada uno, en assets/modelos/ con estos nombres:
+    fotopuerta.glb · sensor_movimiento.glb · sensor_rotacional.glb · sensor_fuerza.glb
+  Los actuales son provisionales. Si cambian los nombres o las opciones: js/config.js → MESAS.m1.modelos.
+
+CARRIL DE AIRE (Mesa 2)
+  Montaje: fotos en assets/carril/ (mesa vacía, computador, interfaz, balanza, varilla, polea, planeador).
+  Prueba: imagen fija assets/carril/prueba_fija.jpg con 3 botones de posición. Cada posición reproduce
+  el video de alistar (se pausa al final y aparece el switch Aire ON/OFF) y luego el video de movimiento.
+  Videos esperados: assets/carril/v19.mp4 … v24.mp4 (19-20 cercana, 21-22 media, 23-24 lejana).
+  En js/config.js → MESAS.m2.carril: ini/fin de cada tramo (segundos) y x/y de cada botón (% de la imagen).
+  La mesa se completa al probar las tres posiciones.

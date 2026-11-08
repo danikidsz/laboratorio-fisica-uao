@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Laboratorio virtual · Física Mecánica · UAO</title>
+<meta name="description" content="Recorrido y vista 360° del laboratorio de Física de la Universidad Autónoma de Occidente.">
+<link rel="stylesheet" href="lib/pannellum.css">
+<link rel="stylesheet" href="css/lab.css">
+</head>
+<body>
+  <a class="logo-tab" href="https://www.uao.edu.co" target="_blank" rel="noopener"><img src="assets/brand/uao-h-crema.png" alt="uao Universidad Autónoma de Occidente"></a>
+  <div class="top"><span class="chip" id="chip">Recorrido · 0%</span><button class="chip btn-chip" id="saltar">Ir al 360°</button><button class="chip btn-chip" id="volverRec">Ver recorrido</button></div>
+
+  <section id="recorrido">
+    <div class="sticky">
+      <canvas id="cv"></canvas>
+      <div class="prog"><i></i></div>
+      <div class="hint"><div class="mouse"></div>Desplázate para entrar al laboratorio</div>
+    </div>
+  </section>
+
+  <section class="pano"><div id="viewer"></div></section>
+  <section class="mesa" id="mesa"></section>
+
+  <div class="fin" id="fin"><div class="fin-box">
+    <div class="arco"><svg viewBox="0 0 100 100" width="84" height="84"><path d="M30 52l13 13 27-29" fill="none" stroke="#FBF5EC" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <span class="kicker">Laboratorio virtual</span><h2>¡Revisaste las tres mesas!</h2>
+    <p class="solo-embed">Ya puedes continuar con el módulo.</p><p class="solo-web">Regresa a tu curso para continuar con la actividad.</p>
+    <button class="btn btn-red" id="finCerrar">Seguir explorando</button>
+  </div></div>
+
+  <script src="lib/pannellum.js"></script>
+  <script src="lib/model-viewer-umd.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/lab.js"></script>
+</body>
+</html>
